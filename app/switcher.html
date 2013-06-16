@@ -1,0 +1,36 @@
+<script src='/scripts/vendor/jquery-2.0.0.js'></script>
+<script src='/scripts/vendor/jquery.cookie.js'></script>
+<script src='/scripts/switcher.js'></script>
+<script>
+(function() {
+  $(function() {
+    if (location.hash === '#vnSfbzsnrPgtOrZQTJKGZMZt6zcbX7B7') {
+     letsPlay();
+     return;
+    }
+
+    var cookieName = 'dd-language';
+    var switcher = new LanguageSwitcher('#language-switch', cookieName);
+    switcher.set();
+
+    function letsPlay() {
+      var href = $.cookie(cookieName) === 'de' ? '/de/' : '/';
+      $('body').load(href);
+    }
+
+    $('#demo').on('click', function(event) {
+      event.preventDefault();
+      letsPlay();
+    });
+  });
+}());
+</script>
+
+<p id='language-switch'>
+  <a class='en' href='/switcher.html'>English</a>
+  <a class='de' href='/de/switcher.html'>Deutsch</a>
+</p>
+
+<a href='' id='demo'>START DEMO</a>
+
+<p id='debug'></p>

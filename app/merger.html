@@ -1,0 +1,10 @@
+<script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.1.1/lodash.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js'></script>
+<script src='scripts/vendor/random.js'></script>
+<script src='scripts/merger.js'></script>
+<script>
+var json = '{"db_map":[{"type":"nachname","amount":99.83107304306448},{"type":"adresse","amount":99.83107304306448},{"type":"wohnort","amount":99.83107304306448},{"type":"telefonnummer","amount":79.86485843445158},{"type":"geburtsdatum","amount":90.01758444144835},{"type":"geschlecht","amount":90.01758444144835},{"type":"email","amount":50.08792220724174},{"type":"personalakten","amount":0.5191215798239353},{"type":"lebenslauf","amount":0.5191215798239353},{"type":"vorname","amount":99.83107304306448},{"type":"besuchteschulen","amount":0.5191215798239353},{"type":"einkommen","amount":0.4991553652153224},{"type":"schulden","amount":0.4991553652153224},{"type":"iq","amount":0.17584441448348181},{"type":"ipadresse","amount":0.17584441448348181}],"db_amount":1134810,"db_max":8430558,"profileset_map":[{"type":"nachname","amount":100},{"type":"adresse","amount":100},{"type":"wohnort","amount":100},{"type":"telefonnummer","amount":100},{"type":"geburtsdatum","amount":100},{"type":"geschlecht","amount":100},{"type":"vorname","amount":100},{"type":"gewicht","amount":100},{"type":"koerpergroesse","amount":100},{"type":"krankenakte","amount":100},{"type":"chronischekrankheiten","amount":100}],"profileset_amount":12410}';
+var merger = new Merger(json);
+var result = merger.merge();
+//console.log(JSON.stringify(result), result);
+</script>

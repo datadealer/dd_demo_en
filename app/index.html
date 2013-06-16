@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Data Dealer. </title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Switch it up!
+Become a data dealer and get all the dirty details on your friends, neighbors and the rest of the world." />
+
+    <meta property="fb:page_id" content="207445009302306" />
+    <meta property="fb:admins" content="100001188683580" />
+
+    <meta property="og:title" content="Data Dealer. legal? illegal? whatever. Demo Version." />
+    <meta property="og:description" content="Switch it up!
+Become a data dealer and get all the dirty details on your friends, neighbors and the rest of the world." />
+    <meta property="og:image" content="http://www.datadealer.net/img/screenshot.jpg" />
+    <meta property="og:site_name" content="Data Dealer: Demo Version" />
+    <meta property="og:locale" content="en_EN" />
+    <meta property="og:url" content="http://demo.datadealer.net" />
+    <meta property="og:type" content="website" />
+    <!--<meta http-equiv="pragma" content="no-cache">-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=1120" />
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <script>
+    // Prevent direct linking except if we are already in our data warehouse in the middle of the street.
+    var re = new RegExp('^https?://[^.]*\.?datadealer\.(?:com|net)/?');
+                                                         // Hey, script kiddies! Here is a super-secret token for direct linking!
+    if (!re.test(document.referrer) && location.hash !== '#vnSfbzsnrPgtOrZQTJKGZMZt6zcbX7B7') {
+      top.location.replace('/');
+    }
+    </script>
+    <!-- build:js scripts/main.js -->
+    <script data-main="scripts/main" src="scripts/vendor/require.js"></script>
+    <!-- endbuild -->
+  </head>
+  <body>
+
+<div id="wrap_all">
+<div id="lockscreen_loading"><div id="loadprogress"><img src="img/loader.gif" /></div></div>
+<div id="lockscreen"></div>
+<div id="lockscreen_cash"></div>
+<div id="lockscreen_AP"></div>
+<div id="lockscreen_locked"></div>
+<div id="game_header">
+  <div id="logo"></div>
+  <div id="menu">
+    <div id="switch_main">My Empire</div>
+    <div id="switch_db">Database</div>
+    <div id="switch_help">Help</div>
+  </div>
+  <div id="fb-header">
+    <div class="fb-twitter"><a href="http://twitter.com/datadealer" target="_blank"><img src="/img/twitter.png" /></a></div>
+    <div class="fb-gplus"><a href="https://plus.google.com/116218611816441604150/posts" target="_blank"><img src="/img/gplus.png" /></a></div>
+    <div class="fb-facebook"><a href="http://facebook.com/datadealer" target="_blank"><img src="/img/facebook.png" /></a></div>
+    <div class="fb-like header" data-href="http://facebook.com/datadealer" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="tahoma"></div>
+  </div>
+</div>
+  <div id="canvas_wrap">
+    <div id="canvas"></div>
+    <div id="db_queue">
+      <div id="db_queue_title">New Profiles!</div>
+    </div>
+  </div>
+  <div id="help_wrap">
+    <div id="help">
+    </div>
+  </div>
+</div>
+
+<script id="popupProjectUpgradeTemplate" type="text/x-jquery-tmpl">
+             <div class="upgrade_wrap{{if bought}} bought{{/if}}{{if locked}} locked{{/if}}">
+               <div class="upgrade">
+                 <div class="upgrade-title">${title}</div>
+                 <div class="upgrade-logo"><img src="${logo}" /></div>
+                 {{if !bought && !locked}}
+                 <div class="upgrade-bonus_wrap">
+                     <span class="cash"><img src="img/icon-money_s1.png" style="height:12px;width:14px;" /> ${ksNum(action_cost)}</span>
+                 </div>
+                 {{/if}}
+               </div>
+               <div class="inset-popup_wrap hidden">
+                 <div class="inset-popup">
+                   <div class="inset-popup-close"></div>
+                   <div class="inset-popup-logo"><img src="${logo_big}"></div>
+                   <div class="inset-popup-title">${title}</div>
+                   <div class="inset-popup-bonus">
+                     {{if bonus_token }}
+                         <div class="bonus_tokens">
+                           <div class="neu">New</div>
+                         {{each bonus_token}}
+                            <div class="bonus token">${getTokenSettings($value).title}</div>
+                         {{/each}}
+                         </div>
+                     {{/if}}
+                     {{if bonus_profiles }}
+                      <div class="bonus_timer">
+                         <div class="neu"><img class="timer" src="img/bonus_timer.png" /></div>
+                     {{else bonus_risk}}
+                      <div class="bonus_timer">
+                         <div class="neu"><img class="timer" src="img/bonus_timer.png" /></div>
+                     {{else bonus_cost}}
+                      <div class="bonus_timer">
+                         <div class="neu"><img class="timer" src="img/bonus_timer.png" /></div>
+                     {{/if}}
+                       {{if bonus_profiles }}
+                         <div class="bonus profiles">+${bonus_profiles} Profiles</div>
+                       {{/if}}
+                       {{if bonus_risk }}
+                         <div class="bonus risk">${bonus_risk} Risk</div>
+                       {{/if}}
+                       {{if bonus_cost }}
+                         <div class="bonus cash">+$${bonus_cost} Invest</div>
+                       {{/if}}
+                     {{if bonus_profiles }}
+                       </div>
+                     {{else bonus_risk}}
+                       </div>
+                     {{else bonus_cost}}
+                       </div>
+                     {{/if}}
+
+
+                   </div>
+                   <div class="inset-popup-description">${description}</div>
+                   {{if !bought}}<div class="inset-popup-button_wrap"><div class='button-deco cash'>${ksNum(action_cost)}</div><div class="inset-popup-button button-fx" upgrade_id="${id}" onclick="_gaq.push(['_trackEvent', 'English Demo', 'Project', 'Powerup', 1, true]);"><div class="inset-button">Buy</div></div></div>{{/if}}
+                 </div>
+               </div>
+             </div>
+</script>
+
+
+<script id="popupProjectOutputTemplate" type="text/x-jquery-tmpl">
+          <div class="popup-summary">
+             <div class="summary profiles">
+               <img src="img/icon-profile_s1.png" class="summary-img" /> ${amount}
+             </div>
+             <div class="summary risk">
+               <img src="img/icon-risk_s1.png" class="summary-img" /> ${risk}
+               </div>
+          </div>
+          <div class="popup-token-set">
+            {{each tokens}}
+              <div class="popup-token" token_id="${token_id}">
+                <img class="popup-token-img" src="${tokenset_img}" />
+                <div class="popup-token-label">${label}</div>
+              </div>
+            {{/each}}
+          </div>
+          <div class="popup-buttons">
+            {{if button_on}}
+            <div class='button_wrap'>
+              <div class='button-deco cash'>${button_deco_cash}</div><div class='button-fx' onclick="_gaq.push(['_trackEvent', 'English Demo', 'Project', '${title}', 1, true]);"><div class='button'>${button_text}</div></div><div class='button-deco timer'>${button_deco_timer}</div>
+              </div>
+            {{/if}}
+          </div>
+</script>
+
+<script id="popupProjectTemplate" type="text/x-jquery-tmpl">
+<div class="popup_wrap" id="${id}">
+    <div class="popup-project">
+      <div class="popup-close"></div>
+      <div class="popup-header">
+        <div class="popup-logo"><img src="${logo}" /></div>
+        <div class="popup-title">${title}</div>
+        <div class="popup-description" tab="output">{{html description}}</div>
+        <div class="popup-description hidden" tab="upgrades">{{html text_upgrades}}</div>
+        <div class="popup-description hidden" tab="actions">{{html text_actions}}</div>
+        <div class="popup-description hidden" tab="team">{{html text_team}}</div>
+        <div class="popup-menu_wrap">
+          <div class="popup-menu active popup-menu-output" tab="output">Data</div>
+          <div class="popup-menu popup-menu-upgrades" tab="upgrades">Upgrade</div>
+          <div class="popup-menu popup-menu-actions" tab="actions">Ads</div>
+          <div class="popup-menu popup-menu-team" tab="team">Team</div>
+        </div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-tab popup-output" tab="output">
+          {{tmpl "#popupProjectOutputTemplate" }}
+        </div>
+        <div class="popup-tab popup-upgrades hidden" tab="upgrades">
+          <div class="upgrades_wrap">
+               {{tmpl(upgrades) "#popupProjectUpgradeTemplate" }}
+           </div>
+        </div>
+        <div class="popup-tab popup-actions hidden" tab="actions">
+          <div class="upgrades_wrap">
+               {{tmpl(actions) "#popupProjectUpgradeTemplate" }}
+          </div>
+        </div>
+        <div class="popup-tab popup-team hidden" tab="team">
+          <div class="upgrades_wrap">
+               {{tmpl(team) "#popupProjectUpgradeTemplate" }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="popupContactTemplate" type="text/x-jquery-tmpl">
+<div class="popup_wrap" id="${id}">
+    <div class="popup-contact">
+      <div class="popup-close"></div>
+      <div class="popup-header">
+        <div class="popup-contact-logo"><img src="${logo}" /></div>
+        <div class="popup-contact-title">${title}</div>
+        <div class="popup-contact-description">{{html description}}</div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-output" tab="output">
+          <div class="popup-summary">
+             <div class="summary profiles">
+               <img src="img/icon-profile_s1.png" class="summary-img" /> ${amount}
+             </div>
+             <div class="summary risk">
+               <img src="img/icon-risk_s1.png" class="summary-img" /> ${risk}
+               </div>
+          </div>
+          <div class="popup-token-set">
+            {{each tokens}}
+              <div class="popup-token" token_id="${token_id}">
+                <img class="popup-token-img" src="${tokenset_img}" />
+                <div class="popup-token-label">${label}</div>
+              </div>
+            {{/each}}
+          </div>
+          {{if button_on}}
+          <div class="popup-buttons">
+            <div class='button_wrap'>
+              <div class='button-deco cash'>${button_deco_cash}</div><div class='button-fx' onclick="_gaq.push(['_trackEvent', 'English Demo', 'Contact', '${title}', 1, true]);"><div class="button" id="button">${button_text}</div></div><div class='button-deco timer'>${button_deco_timer}</div>
+              </div>
+          </div>
+        {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="popupProfilesetTemplateNew" type="text/x-jquery-tmpl">
+<div class="popup_wrap" id="${id}">
+    <div class="popup-contact">
+      <div class="popup-close"></div>
+      <div class="popup-header">
+        <div class="popup-profileset-logo"><img src="${logo}" /></div>
+        <div class="popup-profileset-title">${title}</div>
+        <div class="popup-profileset-subtitle"><span style="color:#999;">Source: </span>${subtitle}</div>
+        <div class="popup-profileset-description" style="font-size:14px;">{{html description}}</div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-output" tab="output">
+          <div class="popup-summary">
+             <div class="summary profiles">
+               <img src="img/icon-profile_s1.png" class="summary-img" /> ${amount}
+             </div>
+          </div>
+          <div class="popup-token-set">
+            {{each tokens}}
+              <div class="popup-token" token_id="${settings.token_id}">
+                {{if !notnew}}<div class="newtoken">New!</div>{{/if}}
+                <img class="popup-token-img" src="${settings.tokenset_img_up}" />
+                <div class="popup-token-label">${settings.label} ${isnew}</div>
+              </div>
+            {{/each}}
+          </div>
+          {{if button_on}}
+          <div class="popup-buttons">
+            <div class='button_wrap'>
+              <div class='button-deco AP'>${button_deco_AP}</div><div class="button-fx" onclick="_gaq.push(['_trackEvent', 'English Demo', 'Profileset', '${subtitle}', 1, true]);"><div class='button'>${button_text}</div></div>
+              </div>
+          </div>
+        {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="popupCustomerTemplate" type="text/x-jquery-tmpl">
+<div class="popup_wrap" id="${id}">
+    <div class="popup-contact">
+      <div class="popup-close"></div>
+      <div class="popup-header">
+        <div class="popup-contact-logo"><img src="${logo}" /></div>
+        <div class="popup-customer-title">${title}</div>
+        <div class="popup-customer-description">{{html description}}</div>
+      </div>
+      <div class="popup-body">
+        <div class="popup-output" tab="output">
+          <div class="popup-summary">
+            <div class="summary cash">
+              <img src="img/icon-money_s1.png" class="summary-img" /> ${amount}
+            </div>
+          </div>
+          <div class="popup-token-set">
+            {{each tokens_in}}
+              <div class="popup-token" token_id="${token_id}">
+                <img class="popup-token-img" src="${tokenset_img}" />
+                <div class="popup-token-label">${label}</div>
+              </div>
+            {{/each}}
+            {{each tokens_out}}
+              <div class="popup-token" token_id="${token_id}">
+                <img class="popup-token-img" src="${tokenset_img_down}" />
+                <div class="popup-token-label">${label}</div>
+              </div>
+            {{/each}}
+          </div>
+          {{if button_on}}
+          <div class="popup-buttons">
+            <div class='button_wrap'>
+              <div class='button-deco AP'>${button_deco_AP}</div><div class="button-fx" onclick="_gaq.push(['_trackEvent', 'English Demo', 'Client', '${title}', 1, true]);"><div class='button'>${button_text}</div></div><div class='button-deco timer'>${button_deco_timer}</div>
+              </div>
+          </div>
+        {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="popupInsetTemplate" type="text/x-jquery-tmpl">
+               <div class="inset-popup_wrap" id="${id}">
+                 <div class="inset-popup">
+                   <div class="inset-popup-close"></div>
+                   <div class="inset-popup-logo"><img src="${logo}"></div>
+                   <div class="inset-popup-title">${title}</div>
+                   <div class="inset-popup-stats">${stats_text} ${stats} People</div>
+                   <div class="inset-popup-description">{{html description}}</div>
+                   <div class="inset-popup-button_wrap">
+                     <div class="inset-popup-button button-fx"><div class="inset-button">Ok</div></div>
+                   </div>
+                 </div>
+               </div>
+</script>
+
+<script id="popupTemplate" type="text/x-jquery-tmpl">
+<div class="popup_wrap" id="${id}">
+    <div class="popup">
+    <div class="popup-close"></div>
+      <table class="popup-table">
+        <tr>
+          <td class="popup-top-left"></td>
+          <td class="popup-top"></td>
+          <td class="popup-top-right">
+          </td>
+        </tr>
+        <tr>
+          <td class="popup-left"></td>
+          <td class="popup-back">
+            <div class="popup-content">
+              <div class="popup-logo-free"><img src="${logo}" /></div>
+              <div class="popup-title-free">${title}</div>
+              <div class="popup-subtitle-free">${subtitle}</div>
+              <div class="popup-description-free">{{html description}}</div>
+            <div class="popup-buttons-free">
+              <div class='button_wrap'>
+                <div class='button-fx'><div class='button'>${button_text}</div></div>
+              </div>
+            </div>
+          </td>
+          <td class="popup-right"></td>
+        </tr>
+        <tr>
+          <td class="popup-bottom-left"></td>
+          <td class="popup-bottom"></td>
+          <td class="popup-bottom-right"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</script>
+
+<script id="popupProtestTemplate" type="text/x-jquery-tmpl">
+<div class="popup_wrap" id="${id}">
+    <div class="popup">
+      <table class="popup-table">
+        <tr>
+          <td class="popup-top-left"></td>
+          <td class="popup-top"></td>
+          <td class="popup-top-right">
+          </td>
+        </tr>
+        <tr>
+          <td class="popup-left"></td>
+          <td class="popup-back">
+            <div class="popup-content">
+              <div class="popup-logo-free"><img src="${logo}" /></div>
+              <div class="popup-title-free">${title}</div>
+              <div class="popup-subtitle-free">${subtitle}</div>
+              <div class="popup-description-free">{{html description}}</div>
+            <div class="popup-buttons-free">
+              <div class='button_wrap'>
+                <div class='button-deco cash'>${button_deco_cash}</div><div class='button-fx'><div class='button'>${button_text}</div></div>
+              </div>
+            </div>
+          </td>
+          <td class="popup-right"></td>
+        </tr>
+        <tr>
+          <td class="popup-bottom-left"></td>
+          <td class="popup-bottom"></td>
+          <td class="popup-bottom-right"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</script>
+
+
+<script id="popupTokenTemplate" type="text/x-jquery-tmpl">
+<div class="popup_wrap" id="${id}">
+    <div class="popup">
+    <div class="popup-close"></div>
+      <table class="popup-table">
+        <tr>
+          <td class="popup-top-left"></td>
+          <td class="popup-top"></td>
+          <td class="popup-top-right">
+          </td>
+        </tr>
+        <tr>
+          <td class="popup-left"></td>
+          <td class="popup-back">
+            <div class="popup-content">
+              <div class="popup-logo-free" style="margin:-4px 0 0 -9px;"><img src="${logo}" /></div>
+              <div class="popup-title-free">${title}</div>
+              <div class="popup-stats-free">${stats_text} ${stats} People</div>
+              <div class="popup-description-free">{{html description}}</div>
+            <div class="popup-buttons-free">
+              <div class='button_wrap'>
+                <div class='button-fx'><div class='button'>${button_text}</div></div>
+              </div>
+            </div>
+          </td>
+          <td class="popup-right"></td>
+        </tr>
+        <tr>
+          <td class="popup-bottom-left"></td>
+          <td class="popup-bottom"></td>
+          <td class="popup-bottom-right"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</script>
+
+<script id="introTemplate" type="text/x-jquery-tmpl">
+  <div id="lockscreen_intro">
+    <div class="intro-body">
+     <div class="intro-grfx"><img src="${grfx}"></div>
+     <div class="intro-title">${title}</div>
+     <div class="intro-text">${text}</div>
+   </div>
+   <div class='intro-button button_wrap'>
+     <div class='button-fx'><div class='button'>${button_text}</div></div>
+   </div>
+   {{if !noskip}}<div class="intro-skip">...Skip Intro</div>{{/if}}
+  </div>
+</script>
+
+    <!-- Google Analytics -->
+    <script>
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'GOOGLE-ANALYTICS-ACCOUNT');
+      ga('send', 'pageview');
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'GOOGLE-ANALYTICS-ACCOUNT']);
+      _gaq.push(['_setDomainName', 'datadealer.com']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    <!-- End Google Analytics -->
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=309031155815795";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</body>
+</html>
